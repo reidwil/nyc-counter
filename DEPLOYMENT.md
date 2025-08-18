@@ -88,16 +88,16 @@ cd qr-madness
 npm install --production
 
 # Configure nginx
-sudo cp deploy/nginx.conf /etc/nginx/sites-available/qr-counter
-sudo sed -i 's/yourdomain.com/YOUR_DOMAIN/g' /etc/nginx/sites-available/qr-counter
-sudo ln -s /etc/nginx/sites-available/qr-counter /etc/nginx/sites-enabled/
+sudo cp deploy/nginx.conf /etc/nginx/sites-available/nyc-qr-counter
+sudo sed -i 's/yourdomain.com/YOUR_DOMAIN/g' /etc/nginx/sites-available/nyc-qr-counter
+sudo ln -s /etc/nginx/sites-available/nyc-qr-counter /etc/nginx/sites-enabled/
 sudo nginx -t && sudo systemctl reload nginx
 
 # Get SSL certificate
 sudo certbot --nginx -d yourdomain.com -d www.yourdomain.com
 
 # Start the app
-NODE_ENV=production CUSTOM_DOMAIN=yourdomain.com pm2 start server/app.js --name qr-counter
+NODE_ENV=production CUSTOM_DOMAIN=yourdomain.com pm2 start server/app.js --name nyc-qr-counter
 pm2 save
 pm2 startup
 ```
@@ -144,10 +144,10 @@ export PORT=3000
 pm2 status
 
 # View logs
-pm2 logs qr-counter
+pm2 logs nyc-qr-counter
 
 # Restart app
-pm2 restart qr-counter
+pm2 restart nyc-qr-counter
 
 # Auto-restart on server reboot
 pm2 startup
@@ -177,7 +177,7 @@ sudo certbot renew --dry-run
 ### App Won't Start
 ```bash
 # Check logs
-pm2 logs qr-counter
+pm2 logs nyc-qr-counter
 
 # Check if port is in use
 sudo netstat -tulpn | grep :3000
@@ -232,7 +232,7 @@ cd /home/qruser/qr-madness
 git pull origin main
 
 # Restart app
-pm2 restart qr-counter
+pm2 restart nyc-qr-counter
 ```
 
 ---

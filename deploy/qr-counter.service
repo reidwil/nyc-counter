@@ -23,7 +23,7 @@ ReadWritePaths=/home/qruser/qr-madness/server/data
 # Logging
 StandardOutput=syslog
 StandardError=syslog
-SyslogIdentifier=qr-counter
+SyslogIdentifier=nyc-qr-counter
 
 [Install]
 WantedBy=multi-user.target 

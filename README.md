@@ -124,7 +124,7 @@ For production deployment:
 2. **Use a process manager**
    ```bash
    npm install -g pm2
-   pm2 start server/app.js --name qr-counter
+   pm2 start server/app.js --name nyc-qr-counter
    ```
 
 3. **Configure reverse proxy** (nginx/Apache) for custom domains

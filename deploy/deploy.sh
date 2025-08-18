@@ -8,7 +8,7 @@ set -e
 # Configuration
 DOMAIN="yourdomain.com"  # Change this to your domain
 APP_DIR="/home/qruser/qr-madness"
-NGINX_CONFIG="/etc/nginx/sites-available/qr-counter"
+NGINX_CONFIG="/etc/nginx/sites-available/nyc-qr-counter"
 
 # Colors
 GREEN='\033[0;32m'
@@ -20,7 +20,7 @@ echo -e "${GREEN}🚀 Deploying QR Counter...${NC}"
 
 # Stop the app
 echo -e "${YELLOW}⏹️  Stopping current app...${NC}"
-sudo -u qruser pm2 stop qr-counter || echo "App not running"
+sudo -u qruser pm2 stop nyc-qr-counter || echo "App not running"
 
 # Update code (if using git)
 echo -e "${YELLOW}📥 Updating code...${NC}"
@@ -52,7 +52,7 @@ fi
 
 # Start the app with PM2
 echo -e "${YELLOW}▶️  Starting app...${NC}"
-sudo -u qruser bash -c "cd $APP_DIR && pm2 start server/app.js --name qr-counter"
+sudo -u qruser bash -c "cd $APP_DIR && pm2 start server/app.js --name nyc-qr-counter"
 sudo -u qruser pm2 save
 sudo -u qruser pm2 startup | tail -1 | sudo bash || echo "PM2 startup already configured"
 
@@ -65,5 +65,5 @@ if curl -f -s https://$DOMAIN/health > /dev/null; then
     echo -e "${GREEN}📱 QR Code page: https://$DOMAIN/qr${NC}"
 else
     echo -e "${RED}❌ Deployment test failed${NC}"
-    echo "Check logs with: sudo -u qruser pm2 logs qr-counter"
+    echo "Check logs with: sudo -u qruser pm2 logs nyc-qr-counter"
 fi 
