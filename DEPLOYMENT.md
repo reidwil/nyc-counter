@@ -57,7 +57,7 @@ scp -r qr-madness/ qruser@your-vps-ip:/home/qruser/
 ```bash
 # Edit the deployment script with your domain
 sudo nano /home/qruser/qr-madness/deploy/deploy.sh
-# Change "yourdomain.com" to your actual domain
+# Change "nyc-qr-counter.com" to your actual domain
 
 # Run deployment
 cd /home/qruser/qr-madness
@@ -67,7 +67,7 @@ sudo ./deploy/deploy.sh
 ### Step 6: Set Environment Variable (Optional)
 ```bash
 # For custom domain override
-echo "CUSTOM_DOMAIN=yourdomain.com" | sudo tee -a /etc/environment
+echo "CUSTOM_DOMAIN=nyc-qr-counter.com" | sudo tee -a /etc/environment
 sudo systemctl restart nginx
 ```
 
@@ -89,15 +89,15 @@ npm install --production
 
 # Configure nginx
 sudo cp deploy/nginx.conf /etc/nginx/sites-available/nyc-qr-counter
-sudo sed -i 's/yourdomain.com/YOUR_DOMAIN/g' /etc/nginx/sites-available/nyc-qr-counter
+sudo sed -i 's/nyc-qr-counter.com/YOUR_DOMAIN/g' /etc/nginx/sites-available/nyc-qr-counter
 sudo ln -s /etc/nginx/sites-available/nyc-qr-counter /etc/nginx/sites-enabled/
 sudo nginx -t && sudo systemctl reload nginx
 
 # Get SSL certificate
-sudo certbot --nginx -d yourdomain.com -d www.yourdomain.com
+sudo certbot --nginx -d nyc-qr-counter.com -d www.nyc-qr-counter.com
 
 # Start the app
-NODE_ENV=production CUSTOM_DOMAIN=yourdomain.com pm2 start server/app.js --name nyc-qr-counter
+NODE_ENV=production CUSTOM_DOMAIN=nyc-qr-counter.com pm2 start server/app.js --name nyc-qr-counter
 pm2 save
 pm2 startup
 ```
@@ -134,7 +134,7 @@ vercel --prod
 ```bash
 # Set these on your server
 export NODE_ENV=production
-export CUSTOM_DOMAIN=yourdomain.com
+export CUSTOM_DOMAIN=nyc-qr-counter.com
 export PORT=3000
 ```
 
@@ -189,7 +189,7 @@ sudo systemctl restart nginx
 ### Domain Not Working
 ```bash
 # Check DNS propagation
-nslookup yourdomain.com
+nslookup nyc-qr-counter.com
 
 # Verify nginx config
 sudo nginx -t
@@ -213,7 +213,7 @@ sudo chown -R qruser:qruser /home/qruser/qr-madness/server/data/
 
 ### Health Check
 ```bash
-curl https://yourdomain.com/health
+curl https://nyc-qr-counter.com/health
 ```
 
 ### Backup Counter Data
@@ -240,9 +240,9 @@ pm2 restart nyc-qr-counter
 ## 🎉 Success!
 
 Your QR Counter should now be live at:
-- **QR Code Page**: `https://yourdomain.com/qr`
-- **Counter Page**: `https://yourdomain.com`
-- **API**: `https://yourdomain.com/api/counter`
+- **QR Code Page**: `https://nyc-qr-counter.com/qr`
+- **Counter Page**: `https://nyc-qr-counter.com`
+- **API**: `https://nyc-qr-counter.com/api/counter`
 
 ## 🔥 Next Steps
 

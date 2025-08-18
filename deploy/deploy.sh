@@ -38,7 +38,7 @@ sudo -u qruser bash -c "cd $APP_DIR && npm install --production"
 if [ ! -f "$NGINX_CONFIG" ]; then
     echo -e "${YELLOW}⚙️  Setting up nginx...${NC}"
     sudo cp $APP_DIR/deploy/nginx.conf $NGINX_CONFIG
-    sudo sed -i "s/yourdomain.com/$DOMAIN/g" $NGINX_CONFIG
+    sudo sed -i "s/nyc-qr-counter.com/$DOMAIN/g" $NGINX_CONFIG
     sudo ln -sf $NGINX_CONFIG /etc/nginx/sites-enabled/
     sudo nginx -t
     sudo systemctl reload nginx
