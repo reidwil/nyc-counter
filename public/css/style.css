@@ -1,0 +1,133 @@
+/* Simple, clean styling */
+body {
+    font-family: Arial, sans-serif;
+    margin: 40px;
+    background-color: #f5f5f5;
+    color: #333;
+    line-height: 1.6;
+}
+
+.container {
+    max-width: 600px;
+    margin: 0 auto;
+    background: white;
+    padding: 30px;
+    border: 1px solid #ddd;
+}
+
+h1 {
+    color: #333;
+    margin-bottom: 20px;
+    font-size: 24px;
+}
+
+.counter-display {
+    text-align: center;
+    margin: 30px 0;
+    padding: 20px;
+    border: 2px solid #333;
+}
+
+.counter-label {
+    font-size: 14px;
+    margin-bottom: 10px;
+    color: #666;
+}
+
+.counter-value {
+    font-size: 48px;
+    font-weight: bold;
+    color: #333;
+}
+
+.stats {
+    margin: 20px 0;
+}
+
+.stat-item {
+    display: flex;
+    justify-content: space-between;
+    padding: 8px 0;
+    border-bottom: 1px solid #eee;
+}
+
+.stat-label {
+    font-weight: bold;
+}
+
+.actions {
+    margin: 30px 0;
+    text-align: center;
+}
+
+.btn {
+    display: inline-block;
+    padding: 10px 20px;
+    margin: 5px;
+    text-decoration: none;
+    border: 1px solid #333;
+    background: white;
+    color: #333;
+}
+
+.btn:hover {
+    background: #f0f0f0;
+}
+
+/* QR Code styles */
+.qr-container {
+    text-align: center;
+}
+
+.qr-code {
+    margin: 20px 0;
+    padding: 20px;
+    border: 1px solid #ddd;
+    display: inline-block;
+}
+
+.qr-code img {
+    max-width: 100%;
+    height: auto;
+}
+
+.qr-instructions {
+    margin: 20px 0;
+    padding: 15px;
+    background: #f9f9f9;
+    border-left: 4px solid #333;
+}
+
+.current-stats {
+    margin: 20px 0;
+    text-align: center;
+}
+
+.stat-display {
+    padding: 15px;
+    border: 1px solid #ddd;
+    display: inline-block;
+}
+
+.qr-info {
+    margin: 20px 0;
+    padding: 10px;
+    background: #f9f9f9;
+    word-break: break-all;
+    font-size: 12px;
+}
+
+footer {
+    text-align: center;
+    margin-top: 40px;
+    padding-top: 20px;
+    border-top: 1px solid #eee;
+    color: #666;
+    font-size: 14px;
+}
+
+/* Loading state */
+.loading {
+    color: #666;
+    font-style: italic;
+} 

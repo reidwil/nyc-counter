@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>QR Code - QR Counter</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Scan QR Code</h1>
+        
+        <div class="qr-container">
+            <div class="qr-code" id="qrCode">
+                <div class="loading">Generating QR Code...</div>
+            </div>
+            
+            <div class="qr-instructions">
+                <p>Point your phone's camera at this QR code to visit the counter page</p>
+            </div>
+            
+            <div class="current-stats">
+                <div class="stat-display">
+                    <div class="stat-label">Current Count:</div>
+                    <div class="stat-value" id="currentCount">-</div>
+                </div>
+            </div>
+            
+            <div class="qr-info">
+                <p>URL: <span id="qrUrl">-</span></p>
+            </div>
+        </div>
+        
+        <div class="actions">
+            <button id="refreshQrBtn" class="btn">Refresh QR</button>
+            <a href="/" class="btn">View Counter</a>
+        </div>
+    </div>
+    
+    <script src="js/qr.js"></script>
+</body>
+</html> 

@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>QR Counter</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <div class="container">
+        <h1>QR Counter</h1>
+        
+        <div class="counter-display">
+            <div class="counter-label">Total Scans</div>
+            <div class="counter-value" id="counterValue">Loading...</div>
+        </div>
+        
+        <div class="stats">
+            <div class="stat-item">
+                <span class="stat-label">Created:</span>
+                <span class="stat-value" id="createdDate">-</span>
+            </div>
+            <div class="stat-item">
+                <span class="stat-label">Last Accessed:</span>
+                <span class="stat-value" id="lastAccessed">-</span>
+            </div>
+        </div>
+        
+        <div class="actions">
+            <button id="refreshBtn" class="btn">Refresh</button>
+            <a href="/qr" class="btn">View QR Code</a>
+        </div>
+        
+        <footer>
+            <p>Scan the QR code to increment this counter!</p>
+        </footer>
+    </div>
+    
+    <script src="js/app.js"></script>
+</body>
+</html> 

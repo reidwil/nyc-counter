@@ -1,0 +1,29 @@
+[Unit]
+Description=QR Counter Node.js App
+Documentation=https://github.com/yourusername/qr-madness
+After=network.target
+
+[Service]
+Type=simple
+User=qruser
+WorkingDirectory=/home/qruser/qr-madness
+ExecStart=/usr/bin/node server/app.js
+Restart=always
+RestartSec=10
+Environment=NODE_ENV=production
+Environment=PORT=3000
+
+# Security settings
+NoNewPrivileges=yes
+PrivateTmp=yes
+ProtectSystem=strict
+ProtectHome=yes
+ReadWritePaths=/home/qruser/qr-madness/server/data
+
+# Logging
+StandardOutput=syslog
+StandardError=syslog
+SyslogIdentifier=qr-counter
+
+[Install]
+WantedBy=multi-user.target 

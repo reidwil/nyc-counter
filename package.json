@@ -1,0 +1,24 @@
+{
+  "name": "qr-madness",
+  "version": "1.0.0",
+  "description": "QR Code Counter Web App",
+  "main": "server/app.js",
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "scripts": {
+    "start": "node server/app.js",
+    "dev": "nodemon server/app.js",
+    "build": "echo 'No build needed'"
+  },
+  "dependencies": {
+    "express": "^4.18.2",
+    "qrcode": "^1.5.3"
+  },
+  "devDependencies": {
+    "nodemon": "^3.0.2"
+  },
+  "keywords": ["qr-code", "counter", "web-app"],
+  "author": "",
+  "license": "MIT"
+} 
