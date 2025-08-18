@@ -6,7 +6,7 @@
 set -e
 
 # Configuration
-DOMAIN="yourdomain.com"  # Change this to your domain
+DOMAIN="nyc-qr-counter.com"  # Change this to your domain
 APP_DIR="/home/qruser/qr-madness"
 NGINX_CONFIG="/etc/nginx/sites-available/nyc-qr-counter"
 
