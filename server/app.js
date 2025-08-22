@@ -49,13 +49,14 @@ if (process.env.NODE_ENV === 'production') {
 }
 
 // Security middleware
-app.use((req, res, next) => {
-  // Force HTTPS in production
-  if (process.env.NODE_ENV === 'production' && !req.secure && req.get('x-forwarded-proto') !== 'https') {
-    return res.redirect(301, 'https://' + req.get('host') + req.url);
-  }
-  next();
-});
+// Disabled HTTPS redirect — nginx handles TLS termination
+// app.use((req, res, next) => {
+//   // Force HTTPS in production
+//   if (process.env.NODE_ENV === 'production' && !req.secure && req.get('x-forwarded-proto') !== 'https') {
+//     return res.redirect(301, 'https://' + req.get('host') + req.url);
+//   }
+//   next();
+// });
 
 app.use(express.static(path.join(__dirname, '..', 'public')));
 
@@ -177,7 +178,7 @@ async function startServer() {
     console.log(`🌐 Server accessible at: ${baseUrl}`);
     
     if (process.env.NODE_ENV === 'production') {
-      console.log(`🔒 HTTPS enforced for production`);
+      console.log(`🔒 HTTPS handled by Nginx reverse proxy`);
     }
   });
 }
