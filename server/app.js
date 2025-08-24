@@ -121,6 +121,11 @@ app.get('/qr', (req, res) => {
   res.sendFile(path.join(__dirname, '..', 'public', 'qr.html'));
 });
 
+// Scan page - increments counter and shows success
+app.get('/scan', (req, res) => {
+  res.sendFile(path.join(__dirname, '..', 'public', 'scan.html'));
+});
+
 // API endpoint to get current counter
 app.get('/api/counter', async (req, res) => {
   try {
@@ -146,9 +151,17 @@ app.post('/api/counter/increment', async (req, res) => {
 // API endpoint to generate QR code
 app.get('/api/qr', async (req, res) => {
   try {
-    const baseUrl = getBaseUrl();
-    const qrCodeDataURL = await QRCode.toDataURL(baseUrl);
-    res.json({ qrCode: qrCodeDataURL, url: baseUrl });
+    let baseUrl = getBaseUrl();
+    
+    // In production, prefer the actual request host over local network detection
+    if (process.env.NODE_ENV === 'production' && req.get('host')) {
+      const protocol = req.secure || req.get('x-forwarded-proto') === 'https' ? 'https' : 'http';
+      baseUrl = `${protocol}://${req.get('host')}`;
+    }
+    
+    const scanUrl = `${baseUrl}/scan`;
+    const qrCodeDataURL = await QRCode.toDataURL(scanUrl);
+    res.json({ qrCode: qrCodeDataURL, url: scanUrl });
   } catch (error) {
     console.error('Error generating QR code:', error);
     res.status(500).json({ error: 'Failed to generate QR code' });
