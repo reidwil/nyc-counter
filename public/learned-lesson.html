@@ -6,94 +6,77 @@
     <title>Lesson Learned - QR Code Security</title>
     <link rel="stylesheet" href="css/style.css">
     <style>
+        /* Mobile-first responsive design */
         .lesson-container {
-            padding: 2rem;
-            max-width: 800px;
-            margin: 2rem auto;
-            line-height: 1.6;
+            padding: 1rem;
+            margin: 0;
+            line-height: 1.5;
         }
         
         .lesson-header {
             text-align: center;
-            margin-bottom: 3rem;
-            padding: 2rem;
+            margin-bottom: 1.5rem;
+            padding: 1rem;
             background: white;
             color: #333;
-            border-radius: 15px;
+        }
+        
+        .lesson-header h1 {
+            font-size: 1.5rem;
+            margin: 0 0 0.5rem 0;
+            line-height: 1.3;
         }
         
         .lesson-box {
             background: #f8f9fa;
-            border-left: 5px solid #28a745;
-            padding: 1.5rem;
-            margin: 2rem 0;
-            border-radius: 0 8px 8px 0;
+            border-left: 4px solid #28a745;
+            padding: 1rem;
+            margin: 1rem 0;
         }
         
-        .warning-box {
-            background: #fff3cd;
-            border-left: 5px solid #ffc107;
-            padding: 1.5rem;
-            margin: 2rem 0;
-            border-radius: 0 8px 8px 0;
+        .lesson-box h3 {
+            font-size: 1.2rem;
+            margin: 0 0 1rem 0;
         }
         
-        .danger-box {
-            background: #f8d7da;
-            border-left: 5px solid #dc3545;
-            padding: 1.5rem;
-            margin: 2rem 0;
-            border-radius: 0 8px 8px 0;
+        .lesson-box ul {
+            margin: 0;
+            padding-left: 1.2rem;
         }
         
-        .tips-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 1.5rem;
-            margin: 2rem 0;
+        .lesson-box li {
+            margin-bottom: 0.8rem;
+            line-height: 1.4;
         }
         
-        .tip-card {
-            background: white;
-            border: 1px solid #dee2e6;
-            border-radius: 8px;
-            padding: 1.5rem;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        /* Tablet and larger screens */
+        @media (min-width: 768px) {
+            .lesson-container {
+                padding: 2rem;
+                max-width: 700px;
+                margin: 2rem auto;
+            }
+            
+            .lesson-header {
+                padding: 2rem;
+                margin-bottom: 2rem;
+            }
+            
+            .lesson-header h1 {
+                font-size: 2rem;
+            }
+            
+            .lesson-box {
+                padding: 1.5rem;
+                margin: 1.5rem 0;
+            }
         }
         
-        .tip-icon {
-            font-size: 2rem;
-            margin-bottom: 1rem;
-        }
-        
-        .actions {
-            text-align: center;
-            margin-top: 3rem;
-        }
-        
-        .btn-secondary {
-            background: #6c757d;
-            color: white;
-            padding: 0.75rem 1.5rem;
-            border: none;
-            border-radius: 8px;
-            text-decoration: none;
-            display: inline-block;
-            margin: 0.5rem;
-            transition: background 0.3s;
-        }
-        
-        .btn-secondary:hover {
-            background: #5a6268;
-        }
-        
-        .stats-box {
-            background: #e7f3ff;
-            border: 1px solid #b8daff;
-            border-radius: 8px;
-            padding: 1.5rem;
-            text-align: center;
-            margin: 2rem 0;
+        /* Desktop screens */
+        @media (min-width: 1024px) {
+            .lesson-container {
+                max-width: 800px;
+            }
         }
     </style>
 </head>
