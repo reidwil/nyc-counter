@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>QR Code Security Warning</title>
+    <link rel="stylesheet" href="css/style.css">
+    <style>
+        .reset-container {
+            padding: 2rem;
+            max-width: 600px;
+            margin: 2rem auto;
+            line-height: 1.6;
+        }
+        
+        .warning-box {
+            background: #fff3cd;
+            border: 1px solid #ffeaa7;
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin: 1.5rem 0;
+        }
+        
+        .danger-box {
+            background: #f8d7da;
+            border: 1px solid #f5c6cb;
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin: 1.5rem 0;
+        }
+        
+        .tips-box {
+            background: #d1ecf1;
+            border: 1px solid #bee5eb;
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin: 1.5rem 0;
+        }
+        
+        .reset-message {
+            text-align: center;
+            font-weight: bold;
+            color: #28a745;
+            margin-bottom: 2rem;
+        }
+        
+        ul {
+            margin: 1rem 0;
+            padding-left: 1.5rem;
+        }
+        
+        li {
+            margin: 0.5rem 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="reset-container">
+            <div class="reset-message">
+                Counter has NOT been reset to 0
+            </div>
+            
+            <h1>⚠️ QR Code Security Warning</h1>
+            
+            <div class="warning-box">
+                <h3>🚨 You Just Scanned a Random QR Code</h3>
+                <p>Don't worry you were the $TIMES_CLICKED_RESET person to click the reset button on a random QR code.</p>
+                <p>This demonstration shows how easily QR codes can redirect you to unexpected websites. You trusted this code enough to scan it, but do you know where it really leads?</p>
+            </div>
+            
+            <div class="danger-box">
+                <h3>🔓 Dangers of Scanning Unknown QR Codes:</h3>
+                <ul>
+                    <li><strong>Malicious Websites:</strong> QR codes can lead to phishing sites that steal your personal information</li>
+                    <li><strong>Malware Downloads:</strong> Some codes trigger automatic downloads of harmful software</li>
+                    <li><strong>Financial Scams:</strong> Fake payment portals can steal credit card information</li>
+                    <li><strong>Location Tracking:</strong> Malicious codes can track your device and location</li>
+                    <li><strong>Social Engineering:</strong> Attackers use QR codes to appear legitimate and trustworthy</li>
+                </ul>
+            </div>
+            
+            <div class="tips-box">
+                <h3>🛡️ How to Stay Safe:</h3>
+                <ul>
+                    <li><strong>Preview URLs:</strong> Use QR scanners that show the destination before opening</li>
+                    <li><strong>Verify Sources:</strong> Only scan codes from trusted, official sources</li>
+                    <li><strong>Check URLs:</strong> Look for suspicious domains or misspellings</li>
+                    <li><strong>Avoid Public QR Codes:</strong> Be wary of codes on stickers, posters, or public places</li>
+                    <li><strong>Use Browser Security:</strong> Keep your browser and security software updated</li>
+                    <li><strong>Don't Auto-Download:</strong> Never allow automatic downloads from QR codes</li>
+                </ul>
+            </div>
+            
+            <div class="warning-box">
+                <p><strong>Remember:</strong> QR codes are just fancy links. Treat them with the same caution you would any suspicious URL. When in doubt, don't scan!</p>
+            </div>
+            
+            <div style="text-align: center; margin-top: 2rem;">
+                <a href="/" class="btn">Back to Counter</a>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
