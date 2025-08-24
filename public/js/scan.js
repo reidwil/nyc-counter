@@ -2,14 +2,13 @@
 class ScanPage {
     constructor() {
         this.counterValueEl = document.getElementById('counterValue');
-        this.warningPopup = document.getElementById('warningPopup');
         this.resetBtn = document.getElementById('resetBtn');
         this.init();
     }
     
     init() {
-        // Increment counter on page load and display results
-        this.incrementAndDisplay();
+        // Load and display current counter (no increment)
+        this.loadAndDisplay();
         
         // Set up reset button click handler
         this.setupResetButton();
@@ -17,64 +16,27 @@ class ScanPage {
     
     setupResetButton() {
         this.resetBtn.addEventListener('click', (e) => {
-            e.preventDefault();
-            this.startWarningAnimation();
+            // Redirect to reset page with browser popups
+            window.location.href = '/reset';
         });
     }
     
-    startWarningAnimation() {
-        // Show and hide the popup multiple times
-        let showCount = 0;
-        const maxShows = 3; // Show popup 3 times
-        
-        const showHidePopup = () => {
-            if (showCount < maxShows) {
-                // Show popup
-                this.warningPopup.classList.add('show');
-                
-                // Hide popup after 1.5 seconds
-                setTimeout(() => {
-                    this.warningPopup.classList.remove('show');
-                    showCount++;
-                    
-                    // Wait 0.5 seconds before showing again
-                    setTimeout(() => {
-                        showHidePopup();
-                    }, 500);
-                }, 1500);
-            } else {
-                // After all popups are done, navigate to reset page
-                setTimeout(() => {
-                    window.location.href = '/reset';
-                }, 500);
-            }
-        };
-        
-        // Start the animation sequence
-        showHidePopup();
-    }
-    
-    async incrementAndDisplay() {
+    async loadAndDisplay() {
         try {
             this.counterValueEl.textContent = 'Loading...';
             
-            // Increment the counter
-            const incrementResponse = await fetch('/api/counter/increment', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                }
-            });
+            // Just load the current counter (no increment)
+            const response = await fetch('/api/counter');
             
-            if (!incrementResponse.ok) {
-                throw new Error(`HTTP error! status: ${incrementResponse.status}`);
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
             }
             
-            const data = await incrementResponse.json();
+            const data = await response.json();
             this.counterValueEl.textContent = data.count;
             
         } catch (error) {
-            console.error('Error incrementing counter:', error);
+            console.error('Error loading counter:', error);
             this.counterValueEl.textContent = 'Error';
         }
     }

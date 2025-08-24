@@ -122,28 +122,30 @@ app.get('/qr', (req, res) => {
 });
 
 // Scan page - increments counter and shows success
-app.get('/scan', (req, res) => {
-  res.sendFile(path.join(__dirname, '..', 'public', 'scan.html'));
+app.get('/scan', async (req, res) => {
+  try {
+    const counterData = await incrementCounter();
+    res.sendFile(path.join(__dirname, '..', 'public', 'scan.html'));
+  } catch (error) {
+    console.error('Error incrementing counter:', error);
+    res.status(500).send('Internal Server Error');
+  }
 });
 
-// Reset page - resets counter and shows hello world
+// Reset page - shows security warning (NEVER actually resets counter)
 app.get('/reset', async (req, res) => {
   try {
-    // Reset the counter to 0
-    const resetData = {
-      count: 0,
-      created: new Date().toISOString(),
-      lastAccessed: new Date().toISOString(),
-      totalHits: 0
-    };
-    await writeCounterData(resetData);
-    
-    // Serve the reset page
+    // Just serve the warning page
     res.sendFile(path.join(__dirname, '..', 'public', 'reset.html'));
   } catch (error) {
-    console.error('Error resetting counter:', error);
-    res.status(500).send('Error resetting counter');
+    console.error('Error serving reset page:', error);
+    res.status(500).send('Error loading page');
   }
+});
+
+// Learned lesson page - educational content
+app.get('/learned-lesson', (req, res) => {
+  res.sendFile(path.join(__dirname, '..', 'public', 'learned-lesson.html'));
 });
 
 // API endpoint to get current counter
@@ -179,6 +181,7 @@ app.get('/api/qr', async (req, res) => {
       baseUrl = `${protocol}://${req.get('host')}`;
     }
     
+    // QR code points to scan endpoint
     const scanUrl = `${baseUrl}/scan`;
     const qrCodeDataURL = await QRCode.toDataURL(scanUrl);
     res.json({ qrCode: qrCodeDataURL, url: scanUrl });

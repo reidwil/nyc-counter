@@ -6,100 +6,341 @@
     <title>QR Code Security Warning</title>
     <link rel="stylesheet" href="css/style.css">
     <style>
-        .reset-container {
-            padding: 2rem;
-            max-width: 600px;
-            margin: 2rem auto;
-            line-height: 1.6;
+        body {
+            margin: 0;
+            padding: 0;
+            background: white;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
         }
         
-        .warning-box {
-            background: #fff3cd;
-            border: 1px solid #ffeaa7;
-            border-radius: 8px;
-            padding: 1.5rem;
-            margin: 1.5rem 0;
-        }
-        
-        .danger-box {
-            background: #f8d7da;
-            border: 1px solid #f5c6cb;
-            border-radius: 8px;
-            padding: 1.5rem;
-            margin: 1.5rem 0;
-        }
-        
-        .tips-box {
-            background: #d1ecf1;
-            border: 1px solid #bee5eb;
-            border-radius: 8px;
-            padding: 1.5rem;
-            margin: 1.5rem 0;
-        }
-        
-        .reset-message {
+        .loading-container {
             text-align: center;
+            z-index: 1;
+        }
+        
+        .spinner {
+            width: 60px;
+            height: 60px;
+            border: 6px solid #f3f3f3;
+            border-top: 6px solid #3498db;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 20px;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        .countdown {
+            font-size: 24px;
             font-weight: bold;
-            color: #28a745;
-            margin-bottom: 2rem;
+            color: #333;
+            margin-bottom: 10px;
         }
         
-        ul {
-            margin: 1rem 0;
-            padding-left: 1.5rem;
+        .loading-text {
+            font-size: 16px;
+            color: #666;
         }
         
-        li {
-            margin: 0.5rem 0;
+        /* Browser-like security alert styles */
+        .browser-alert {
+            position: fixed;
+            top: 0;
+            right: 20px;
+            max-width: 350px;
+            background: white;
+            border: 1px solid #ccc;
+            border-radius: 0 0 8px 8px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+            z-index: 10000;
+            transform: translateY(-100%);
+            transition: transform 0.4s ease-out;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            font-size: 14px;
+        }
+        
+        .browser-alert.show {
+            transform: translateY(0);
+        }
+        
+        .alert-header {
+            background: #f8f9fa;
+            border-bottom: 1px solid #e9ecef;
+            padding: 8px 12px;
+            display: flex;
+            align-items: center;
+            font-weight: 600;
+            color: #495057;
+        }
+        
+        .alert-icon {
+            margin-right: 8px;
+            font-size: 16px;
+        }
+        
+        .alert-content {
+            padding: 12px;
+            color: #212529;
+            line-height: 1.4;
+        }
+        
+        .alert-virus {
+            border-left: 4px solid #dc3545;
+        }
+        
+        .alert-virus .alert-header {
+            background: #f8d7da;
+            color: #721c24;
+        }
+        
+        .alert-security {
+            border-left: 4px solid #fd7e14;
+        }
+        
+        .alert-security .alert-header {
+            background: #ffeaa7;
+            color: #833d1a;
+        }
+        
+        .alert-malware {
+            border-left: 4px solid #6f42c1;
+        }
+        
+        .alert-malware .alert-header {
+            background: #e2d9f3;
+            color: #3d1b69;
+        }
+        
+        .alert-download {
+            border-left: 4px solid #20c997;
+        }
+        
+        .alert-download .alert-header {
+            background: #d1ecf1;
+            color: #0f5132;
+        }
+        
+        .alert-buttons {
+            padding: 8px 12px;
+            background: #f8f9fa;
+            border-top: 1px solid #e9ecef;
+            display: flex;
+            gap: 8px;
+        }
+        
+        .alert-btn {
+            padding: 4px 12px;
+            border: 1px solid #ccc;
+            background: white;
+            border-radius: 4px;
+            font-size: 12px;
+            cursor: pointer;
+            color: #495057;
+        }
+        
+        .alert-btn:hover {
+            background: #e9ecef;
+        }
+        
+        .alert-btn-primary {
+            background: #007bff;
+            color: white;
+            border-color: #007bff;
+        }
+        
+        .alert-btn-primary:hover {
+            background: #0056b3;
         }
     </style>
 </head>
 <body>
-    <div class="container">
-        <div class="reset-container">
-            <div class="reset-message">
-                Counter has NOT been reset to 0
-            </div>
-            
-            <h1>⚠️ QR Code Security Warning</h1>
-            
-            <div class="warning-box">
-                <h3>🚨 You Just Scanned a Random QR Code</h3>
-                <p>Don't worry you were the $TIMES_CLICKED_RESET person to click the reset button on a random QR code.</p>
-                <p>This demonstration shows how easily QR codes can redirect you to unexpected websites. You trusted this code enough to scan it, but do you know where it really leads?</p>
-            </div>
-            
-            <div class="danger-box">
-                <h3>🔓 Dangers of Scanning Unknown QR Codes:</h3>
-                <ul>
-                    <li><strong>Malicious Websites:</strong> QR codes can lead to phishing sites that steal your personal information</li>
-                    <li><strong>Malware Downloads:</strong> Some codes trigger automatic downloads of harmful software</li>
-                    <li><strong>Financial Scams:</strong> Fake payment portals can steal credit card information</li>
-                    <li><strong>Location Tracking:</strong> Malicious codes can track your device and location</li>
-                    <li><strong>Social Engineering:</strong> Attackers use QR codes to appear legitimate and trustworthy</li>
-                </ul>
-            </div>
-            
-            <div class="tips-box">
-                <h3>🛡️ How to Stay Safe:</h3>
-                <ul>
-                    <li><strong>Preview URLs:</strong> Use QR scanners that show the destination before opening</li>
-                    <li><strong>Verify Sources:</strong> Only scan codes from trusted, official sources</li>
-                    <li><strong>Check URLs:</strong> Look for suspicious domains or misspellings</li>
-                    <li><strong>Avoid Public QR Codes:</strong> Be wary of codes on stickers, posters, or public places</li>
-                    <li><strong>Use Browser Security:</strong> Keep your browser and security software updated</li>
-                    <li><strong>Don't Auto-Download:</strong> Never allow automatic downloads from QR codes</li>
-                </ul>
-            </div>
-            
-            <div class="warning-box">
-                <p><strong>Remember:</strong> QR codes are just fancy links. Treat them with the same caution you would any suspicious URL. When in doubt, don't scan!</p>
-            </div>
-            
-            <div style="text-align: center; margin-top: 2rem;">
-                <a href="/" class="btn">Back to Counter</a>
-            </div>
+    <!-- Browser-like Security Alerts -->
+    <div class="browser-alert alert-virus" id="virusAlert">
+        <div class="alert-header">
+            <span class="alert-icon">🛡️</span>
+            Chrome - Security Warning
+        </div>
+        <div class="alert-content">
+            <strong>Malicious file detected</strong><br>
+            suspicious_file.exe was blocked because it contains a virus.
+        </div>
+        <div class="alert-buttons">
+            <button class="alert-btn">Dismiss</button>
+            <button class="alert-btn alert-btn-primary">Learn more</button>
         </div>
     </div>
+
+    <div class="browser-alert alert-security" id="securityAlert">
+        <div class="alert-header">
+            <span class="alert-icon">⚠️</span>
+            Windows Security
+        </div>
+        <div class="alert-content">
+            <strong>Suspicious network activity detected</strong><br>
+            An application is attempting to access restricted system files.
+        </div>
+        <div class="alert-buttons">
+            <button class="alert-btn">Allow</button>
+            <button class="alert-btn alert-btn-primary">Block</button>
+        </div>
+    </div>
+
+    <div class="browser-alert alert-malware" id="malwareAlert">
+        <div class="alert-header">
+            <span class="alert-icon">🚨</span>
+            Microsoft Defender
+        </div>
+        <div class="alert-content">
+            <strong>Threat detected and blocked</strong><br>
+            Trojan:Win32/Detplock found in recent download.
+        </div>
+        <div class="alert-buttons">
+            <button class="alert-btn">Quarantine</button>
+            <button class="alert-btn alert-btn-primary">Remove</button>
+        </div>
+    </div>
+
+    <div class="browser-alert alert-download" id="downloadAlert">
+        <div class="alert-header">
+            <span class="alert-icon">📥</span>
+            Chrome - Download
+        </div>
+        <div class="alert-content">
+            <strong>This file may harm your computer</strong><br>
+            banking_credentials.zip appears to contain personal information.
+        </div>
+        <div class="alert-buttons">
+            <button class="alert-btn">Discard</button>
+            <button class="alert-btn alert-btn-primary">Keep</button>
+        </div>
+    </div>
+
+    <div class="loading-container">
+        <div class="spinner"></div>
+        <div class="countdown" id="countdown">10</div>
+        <div class="loading-text">Processing your request...</div>
+    </div>
+
+    <script>
+        // Browser-like security alerts
+        class BrowserAlerts {
+            constructor() {
+                this.alerts = [
+                    { id: 'virusAlert', duration: 4000, delay: 1000 },
+                    { id: 'securityAlert', duration: 3500, delay: 2500 },
+                    { id: 'downloadAlert', duration: 4500, delay: 4000 },
+                    { id: 'malwareAlert', duration: 3000, delay: 6000 }
+                ];
+                this.init();
+            }
+            
+            init() {
+                this.startAlertSequence();
+                this.setupButtonHandlers();
+            }
+            
+            startAlertSequence() {
+                this.alerts.forEach((alert) => {
+                    setTimeout(() => {
+                        this.showAlert(alert.id);
+                    }, alert.delay);
+                });
+                
+                // Show new alerts every 15 seconds (only if not already visible)
+                setTimeout(() => {
+                    this.startAlertSequence();
+                }, 15000);
+            }
+            
+            showAlert(alertId) {
+                const alert = document.getElementById(alertId);
+                // Only show if not already visible
+                if (!alert.classList.contains('show')) {
+                    alert.classList.add('show');
+                    this.playErrorSound();
+                }
+                // No auto-hide - only manual dismissal
+            }
+            
+            playErrorSound() {
+                try {
+                    // Create audio context
+                    const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+                    
+                    // Create oscillator for error beep
+                    const oscillator = audioContext.createOscillator();
+                    const gainNode = audioContext.createGain();
+                    
+                    // Connect nodes
+                    oscillator.connect(gainNode);
+                    gainNode.connect(audioContext.destination);
+                    
+                    // Configure error sound (harsh, attention-grabbing)
+                    oscillator.frequency.setValueAtTime(800, audioContext.currentTime);
+                    oscillator.frequency.exponentialRampToValueAtTime(400, audioContext.currentTime + 0.1);
+                    
+                    // Volume envelope for sharp attack
+                    gainNode.gain.setValueAtTime(0, audioContext.currentTime);
+                    gainNode.gain.linearRampToValueAtTime(0.3, audioContext.currentTime + 0.01);
+                    gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.2);
+                    
+                    // Play sound
+                    oscillator.start(audioContext.currentTime);
+                    oscillator.stop(audioContext.currentTime + 0.2);
+                    
+                } catch (error) {
+                    // Fallback for browsers that don't support Web Audio API
+                    console.log('Audio not supported');
+                }
+            }
+            
+            setupButtonHandlers() {
+                // Make buttons functional (but they don't actually do anything)
+                document.querySelectorAll('.alert-btn').forEach(button => {
+                    button.addEventListener('click', (e) => {
+                        // Close the alert when button is clicked
+                        const alert = e.target.closest('.browser-alert');
+                        alert.classList.remove('show');
+                    });
+                });
+            }
+        }
+        
+        // Countdown functionality
+        class CountdownTimer {
+            constructor(duration) {
+                this.duration = duration;
+                this.countdownEl = document.getElementById('countdown');
+                this.timeLeft = duration;
+                this.startCountdown();
+            }
+            
+            startCountdown() {
+                const timer = setInterval(() => {
+                    this.countdownEl.textContent = this.timeLeft;
+                    
+                    if (this.timeLeft <= 0) {
+                        clearInterval(timer);
+                        window.location.href = '/learned-lesson';
+                    }
+                    
+                    this.timeLeft--;
+                }, 1000);
+            }
+        }
+        
+        // Start the browser alerts and countdown when page loads
+        document.addEventListener('DOMContentLoaded', () => {
+            new BrowserAlerts();
+            new CountdownTimer(10); // 10 seconds countdown
+        });
+    </script>
 </body>
 </html>
