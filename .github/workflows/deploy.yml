@@ -7,7 +7,7 @@ on:
 
 concurrency:
   group: deploy-production
-  cancel-in-progress: true
+  cancel-in-progress: false
 
 jobs:
   deploy:
@@ -24,9 +24,9 @@ jobs:
           script_stop: true
           script: |
             set -e
-            cd /opt/nyc-counter
+            cd /home/qruser/qr-madness
             git fetch origin
             git reset --hard origin/main
             npm ci --omit=dev
-            pm2 restart nyc-counter
+            pm2 restart nyc-qr-counter
             pm2 save
