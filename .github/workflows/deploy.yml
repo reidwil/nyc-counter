@@ -28,9 +28,5 @@ jobs:
             git fetch origin
             git reset --hard origin/main
             npm ci --omit=dev
-<<<<<<< HEAD
             pm2 restart nyc-counter
-=======
-            pm2 restart nyc-qr-counter
->>>>>>> c3d72f6d72b78bc5f7b54188d69863e1fc1ecb0c
             pm2 save
