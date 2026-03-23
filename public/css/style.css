@@ -2,22 +2,22 @@
 body {
     font-family: Arial, sans-serif;
     margin: 40px;
-    background-color: #f0f4ff;
-    color: #333;
+    background-color: #0f0f13;
+    color: #e2e2e2;
     line-height: 1.6;
 }
 
 .container {
     max-width: 600px;
     margin: 0 auto;
-    background: white;
+    background: #1c1c24;
     padding: 36px;
     border-radius: 12px;
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+    box-shadow: 0 4px 24px rgba(0, 0, 0, 0.4);
 }
 
 h1 {
-    color: #1a1a2e;
+    color: #f0f0f0;
     margin-bottom: 20px;
     font-size: 26px;
     letter-spacing: -0.5px;
@@ -54,12 +54,12 @@ h1 {
     display: flex;
     justify-content: space-between;
     padding: 10px 0;
-    border-bottom: 1px solid #f0f0f0;
+    border-bottom: 1px solid #2e2e3a;
 }
 
 .stat-label {
     font-weight: bold;
-    color: #555;
+    color: #aaa;
 }
 
 .actions {
@@ -133,7 +133,7 @@ footer {
     text-align: center;
     margin-top: 40px;
     padding-top: 20px;
-    border-top: 1px solid #eee;
+    border-top: 1px solid #2e2e3a;
     color: #666;
     font-size: 14px;
 }
