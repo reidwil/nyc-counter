@@ -159,12 +159,14 @@ h1 {
 }
 
 .scan-log li {
-    display: flex;
-    justify-content: space-between;
+    display: grid;
+    grid-template-columns: 36px 1fr auto;
+    align-items: center;
     padding: 8px 10px;
     border-radius: 6px;
     font-size: 13px;
     color: #ccc;
+    font-variant-numeric: tabular-nums;
 }
 
 .scan-log li:nth-child(odd) {
@@ -173,12 +175,12 @@ h1 {
 
 .scan-log li .scan-num {
     color: #666;
-    min-width: 32px;
 }
 
 .scan-log li .scan-time {
-    color: #aaa;
+    color: #666;
     font-size: 12px;
+    text-align: right;
 }
 
 footer {

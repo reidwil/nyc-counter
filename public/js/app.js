@@ -55,8 +55,9 @@ class CounterApp {
             list.innerHTML = '<li class="loading">No scans yet.</li>';
             return;
         }
-        list.innerHTML = [...scans].reverse().map((ts, i) => {
+        list.innerHTML = [...scans].reverse().map((scan, i) => {
             const num = scans.length - i;
+            const ts = scan.timestamp || scan;
             const date = new Date(ts);
             return `<li>
                 <span class="scan-num">#${num}</span>

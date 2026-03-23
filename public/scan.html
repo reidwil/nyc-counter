@@ -3,24 +3,56 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>QR Counter</title>
-    <link rel="stylesheet" href="css/style.css">
-
+    <title>.</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            background: #000;
+            color: #fff;
+            font-family: Arial, sans-serif;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            text-align: center;
+            padding: 40px;
+        }
+        .content {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 12px;
+            opacity: 0;
+            transition: opacity 1.5s ease;
+        }
+        .content.visible { opacity: 1; }
+        .number {
+            font-size: 80px;
+            font-weight: bold;
+            font-variant-numeric: tabular-nums;
+            letter-spacing: -2px;
+        }
+        .label {
+            font-size: 13px;
+            color: #444;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+    </style>
 </head>
 <body>
-    <div class="container">
-        <h1>QR Successfully scanned!</h1>
-        
-        <div class="counter-display">
-            <div class="counter-label">Count</div>
-            <div class="counter-value" id="counterValue">Loading...</div>
-        </div>
-        
-        <div class="actions">
-            <button id="resetBtn" class="btn">Reset Counter</button>
-        </div>
+    <div class="content" id="content">
+        <div class="number" id="counterValue">—</div>
+        <div class="label">people have scanned this</div>
     </div>
-    
-    <script src="js/scan.js"></script>
+
+    <script>
+        fetch('/api/counter')
+            .then(r => r.json())
+            .then(data => {
+                document.getElementById('counterValue').textContent = data.count;
+                setTimeout(() => document.getElementById('content').classList.add('visible'), 50);
+            });
+    </script>
 </body>
 </html>

@@ -55,6 +55,7 @@ app.use(session({
 }));
 
 function requireAuth(req, res, next) {
+  if (process.env.NODE_ENV !== 'production') return next();
   if (req.session.authenticated) return next();
   res.redirect('/admin/login');
 }
@@ -159,6 +160,134 @@ app.get('/scan', async (req, res) => {
   }
 });
 
+// Midnight page
+app.get('/midnight', async (req, res) => {
+  try {
+    await incrementCounter({
+      ip: req.ip,
+      userAgent: req.headers['user-agent'],
+      ref: 'midnight',
+    });
+  } catch (e) { /* don't let counter errors break the experience */ }
+
+  res.send(`<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>.</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      background: #000;
+      color: #fff;
+      font-family: Arial, sans-serif;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      text-align: center;
+      padding: 40px;
+    }
+    #hi {
+      display: none;
+      flex-direction: column;
+      gap: 16px;
+    }
+    #hi .word {
+      font-size: 72px;
+      font-weight: bold;
+      opacity: 0;
+      transition: opacity 2s ease;
+    }
+    #hi .sub {
+      font-size: 14px;
+      color: #444;
+      opacity: 0;
+      transition: opacity 2s ease;
+      transition-delay: 1.5s;
+    }
+    #wait {
+      display: none;
+      flex-direction: column;
+      gap: 20px;
+    }
+    #wait .label {
+      font-size: 14px;
+      color: #555;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+    }
+    #wait .countdown {
+      font-size: 52px;
+      font-weight: bold;
+      font-variant-numeric: tabular-nums;
+      letter-spacing: 2px;
+    }
+    #wait .hint {
+      font-size: 13px;
+      color: #333;
+      margin-top: 8px;
+    }
+  </style>
+</head>
+<body>
+
+  <div id="hi">
+    <div class="word" id="hiWord">Hi.</div>
+    <div class="sub" id="hiSub">You actually came back.</div>
+  </div>
+
+  <div id="wait">
+    <div class="label">come back in</div>
+    <div class="countdown" id="countdown">--:--:--</div>
+    <div class="hint">scan this at midnight</div>
+  </div>
+
+  <script>
+    function check() {
+      const now = new Date();
+      const h = now.getHours();
+      const isMidnight = h === 23 || h === 0;
+
+      if (isMidnight) {
+        document.getElementById('hi').style.display = 'flex';
+        setTimeout(() => {
+          document.getElementById('hiWord').style.opacity = 1;
+          setTimeout(() => {
+            document.getElementById('hiSub').style.opacity = 1;
+          }, 500);
+        }, 300);
+      } else {
+        document.getElementById('wait').style.display = 'flex';
+        tick();
+        setInterval(tick, 1000);
+      }
+    }
+
+    function tick() {
+      const now = new Date();
+      const target = new Date();
+      target.setHours(23, 0, 0, 0);
+      if (now >= target) target.setDate(target.getDate() + 1);
+
+      const diff = target - now;
+      const h = Math.floor(diff / 3600000);
+      const m = Math.floor((diff % 3600000) / 60000);
+      const s = Math.floor((diff % 60000) / 1000);
+
+      document.getElementById('countdown').textContent =
+        String(h).padStart(2, '0') + ':' +
+        String(m).padStart(2, '0') + ':' +
+        String(s).padStart(2, '0');
+    }
+
+    check();
+  </script>
+</body>
+</html>`);
+});
+
 // Reset page - shows security warning (NEVER actually resets counter)
 app.get('/reset', async (req, res) => {
   try {
@@ -201,16 +330,16 @@ app.post('/api/counter/increment', async (req, res) => {
 app.get('/api/qr', async (req, res) => {
   try {
     let baseUrl = getBaseUrl();
-    
+
     // In production, prefer the actual request host over local network detection
     if (process.env.NODE_ENV === 'production' && req.get('host')) {
       const protocol = req.secure || req.get('x-forwarded-proto') === 'https' ? 'https' : 'http';
       baseUrl = `${protocol}://${req.get('host')}`;
     }
-    
-    // QR code points to scan endpoint
-    const scanUrl = `${baseUrl}/scan`;
-    const qrCodeDataURL = await QRCode.toDataURL(scanUrl);
+
+    const ref = req.query.ref;
+    const scanUrl = `${baseUrl}/scan${ref ? `?ref=${encodeURIComponent(ref)}` : ''}`;
+    const qrCodeDataURL = await QRCode.toDataURL(scanUrl, { width: 400, margin: 2 });
     res.json({ qrCode: qrCodeDataURL, url: scanUrl });
   } catch (error) {
     console.error('Error generating QR code:', error);
@@ -273,6 +402,148 @@ app.get('/admin/logout', (req, res) => {
   res.redirect('/admin/login');
 });
 
+// QR Generator
+app.get('/admin/generate', requireAuth, (req, res) => {
+  res.send(`<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>QR Generator</title>
+  <style>
+    body { font-family: Arial, sans-serif; background: #0f0f13; color: #e2e2e2; margin: 0; padding: 30px; }
+    h1 { font-size: 22px; color: #f0f0f0; margin-bottom: 6px; }
+    .nav { margin-bottom: 30px; font-size: 13px; }
+    .nav a { color: #7c6af5; text-decoration: none; margin-right: 16px; }
+    .nav a:hover { color: #a78bfa; }
+    .builder { display: flex; gap: 40px; flex-wrap: wrap; align-items: flex-start; }
+    .controls { flex: 1; min-width: 260px; }
+    label { display: block; font-size: 12px; color: #888; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 8px; }
+    input { width: 100%; padding: 10px 14px; background: #25252f; border: 1px solid #2e2e3a; border-radius: 6px; color: #e2e2e2; font-size: 14px; box-sizing: border-box; margin-bottom: 20px; }
+    input:focus { outline: none; border-color: #4f46e5; }
+    .presets { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 20px; }
+    .preset { padding: 6px 12px; background: #25252f; border: 1px solid #2e2e3a; border-radius: 20px; font-size: 12px; color: #aaa; cursor: pointer; }
+    .preset:hover { border-color: #4f46e5; color: #e2e2e2; }
+    .url-preview { background: #25252f; border-radius: 6px; padding: 10px 14px; font-size: 12px; color: #666; margin-bottom: 20px; word-break: break-all; }
+    .url-preview span { color: #a78bfa; }
+    button { padding: 10px 24px; background: #4f46e5; color: white; border: none; border-radius: 6px; font-size: 14px; font-weight: 600; cursor: pointer; margin-right: 8px; }
+    button:hover { background: #4338ca; }
+    .btn-print { background: #25252f; border: 1px solid #2e2e3a; }
+    .btn-print:hover { background: #2e2e3a; }
+    .qr-output { text-align: center; }
+    .qr-box { background: white; border-radius: 12px; padding: 24px; display: inline-block; margin-bottom: 16px; }
+    .qr-box img { display: block; width: 260px; height: 260px; }
+    .qr-label { font-size: 13px; color: #888; }
+    .qr-label strong { color: #a78bfa; }
+    @media print {
+      * { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+      body { background: white; margin: 0; padding: 0; }
+      .nav, .controls, h1, .qr-label { display: none; }
+      .builder { display: block; }
+      .qr-output { display: flex; justify-content: center; align-items: center; min-height: 100vh; }
+      .sticker { display: flex !important; }
+      .qr-box { display: inline-block !important; }
+    }
+  </style>
+</head>
+<body>
+  <div class="nav">
+    <a href="/admin">← Dashboard</a>
+    <a href="/admin/logout">Logout</a>
+  </div>
+  <h1>QR Generator</h1>
+
+  <div class="builder">
+    <div class="controls">
+      <label>Hook Text</label>
+      <input type="text" id="hookInput" placeholder="e.g. How many New Yorkers walked past this?" />
+
+      <label>Subtext <span style="color:#555;font-weight:normal;text-transform:none">(optional)</span></label>
+      <input type="text" id="subInput" placeholder="e.g. Scan to find out" />
+
+      <label>Location Name</label>
+      <input type="text" id="refInput" placeholder="e.g. subway-14th-st" />
+
+      <label>Quick Presets</label>
+      <div class="presets">
+        <div class="preset" onclick="setRef('subway-14th')">Subway 14th</div>
+        <div class="preset" onclick="setRef('subway-union-sq')">Union Sq</div>
+        <div class="preset" onclick="setRef('coffee-shop')">Coffee Shop</div>
+        <div class="preset" onclick="setRef('bar-ludlow')">Bar Ludlow</div>
+        <div class="preset" onclick="setRef('williamsburg')">Williamsburg</div>
+        <div class="preset" onclick="setRef('soho')">SoHo</div>
+      </div>
+
+      <label>Scan URL</label>
+      <div class="url-preview" id="urlPreview">Enter a location name above</div>
+
+      <button onclick="generateQR()">Generate QR</button>
+      <button class="btn-print" onclick="window.print()">Print</button>
+    </div>
+
+    <div class="qr-output">
+      <div class="sticker" id="sticker" style="display:none; flex-direction:column; align-items:center; background:#111; border-radius:16px; padding:32px 40px; max-width:320px; text-align:center;">
+        <p id="stickerHook" style="font-size:22px; font-weight:bold; color:#fff; margin:0 0 6px 0; line-height:1.3;"></p>
+        <p id="stickerSub" style="font-size:14px; color:#aaa; margin:0 0 24px 0;"></p>
+        <div style="background:white; border-radius:10px; padding:16px; display:inline-block;">
+          <img id="qrImg" src="" alt="QR Code" style="display:block; width:200px; height:200px;" />
+        </div>
+        <p id="stickerRef" style="font-size:11px; color:#555; margin:16px 0 0 0;"></p>
+      </div>
+      <div class="qr-label" id="qrLabel"></div>
+    </div>
+  </div>
+
+  <script>
+    const input = document.getElementById('refInput');
+    const hookInput = document.getElementById('hookInput');
+    const subInput = document.getElementById('subInput');
+    const preview = document.getElementById('urlPreview');
+
+    input.addEventListener('input', updatePreview);
+    hookInput.addEventListener('input', updateSticker);
+    subInput.addEventListener('input', updateSticker);
+
+    function setRef(val) {
+      input.value = val;
+      updatePreview();
+      generateQR();
+    }
+
+    function updatePreview() {
+      const ref = input.value.trim();
+      if (!ref) { preview.textContent = 'Enter a location name above'; return; }
+      const slug = slugify(ref);
+      preview.innerHTML = window.location.origin + '/scan?ref=<span>' + slug + '</span>';
+    }
+
+    function updateSticker() {
+      document.getElementById('stickerHook').textContent = hookInput.value || '';
+      document.getElementById('stickerSub').textContent = subInput.value || '';
+    }
+
+    function slugify(val) {
+      return val.toLowerCase().trim().replace(/\\s+/g, '-').replace(/[^a-z0-9-]/g, '');
+    }
+
+    async function generateQR() {
+      const ref = slugify(input.value.trim());
+      if (!ref) return;
+      const res = await fetch('/api/qr?ref=' + encodeURIComponent(ref));
+      const data = await res.json();
+      document.getElementById('qrImg').src = data.qrCode;
+      document.getElementById('stickerHook').textContent = hookInput.value || '';
+      document.getElementById('stickerSub').textContent = subInput.value || '';
+      document.getElementById('stickerRef').textContent = ref;
+      document.getElementById('sticker').style.display = 'flex';
+      document.getElementById('qrLabel').innerHTML = 'Location: <strong>' + ref + '</strong>';
+      preview.innerHTML = window.location.origin + '/scan?ref=<span>' + ref + '</span>';
+    }
+  </script>
+</body>
+</html>`);
+});
+
 // Admin dashboard
 app.get('/admin', requireAuth, async (req, res) => {
   const data = await readCounterData();
@@ -318,6 +589,7 @@ app.get('/admin', requireAuth, async (req, res) => {
 </head>
 <body>
   <a class="logout" href="/admin/logout">Logout</a>
+  <a class="logout" style="margin-right:16px" href="/admin/generate">+ Generate QR</a>
   <h1>Scan Dashboard</h1>
   <p class="meta">Total scans: <strong>${data.count}</strong> &nbsp;|&nbsp; Since: ${new Date(data.created).toLocaleDateString()}</p>
   <div class="stats">
