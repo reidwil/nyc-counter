@@ -24,9 +24,6 @@ jobs:
           script_stop: true
           script: |
             set -e
-            cd /home/qruser/qr-madness
-            git fetch origin
-            git reset --hard origin/main
-            npm ci --omit=dev
+            cd /opt/nyc-counter
+            git pull
             pm2 restart nyc-counter
-            pm2 save
