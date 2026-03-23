@@ -26,4 +26,5 @@ jobs:
             set -e
             cd /opt/nyc-counter
             git pull
+            npm ci --omit=dev
             pm2 restart nyc-counter
