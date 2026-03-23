@@ -46,6 +46,24 @@ class CounterApp {
         this.counterValueEl.textContent = data.count;
         this.createdDateEl.textContent = this.formatDate(data.created);
         this.lastAccessedEl.textContent = this.formatRelativeTime(data.lastAccessed);
+        this.updateScanLog(data.scans || []);
+    }
+
+    updateScanLog(scans) {
+        const list = document.getElementById('scanList');
+        if (scans.length === 0) {
+            list.innerHTML = '<li class="loading">No scans yet.</li>';
+            return;
+        }
+        list.innerHTML = [...scans].reverse().map((ts, i) => {
+            const num = scans.length - i;
+            const date = new Date(ts);
+            return `<li>
+                <span class="scan-num">#${num}</span>
+                <span>${date.toLocaleDateString()} ${date.toLocaleTimeString()}</span>
+                <span class="scan-time">${this.formatRelativeTime(ts)}</span>
+            </li>`;
+        }).join('');
     }
     
     formatDate(dateString) {

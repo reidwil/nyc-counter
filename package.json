@@ -9,16 +9,24 @@
   "scripts": {
     "start": "node server/app.js",
     "dev": "nodemon server/app.js",
+    "dev:ui": "browser-sync start --proxy localhost:3000 --files 'public/**/*' --port 3001",
     "build": "echo 'No build needed'"
   },
   "dependencies": {
+    "dotenv": "^17.3.1",
     "express": "^4.18.2",
+    "express-session": "^1.19.0",
     "qrcode": "^1.5.3"
   },
   "devDependencies": {
+    "browser-sync": "^3.0.2",
     "nodemon": "^3.0.2"
   },
-  "keywords": ["qr-code", "counter", "web-app"],
+  "keywords": [
+    "qr-code",
+    "counter",
+    "web-app"
+  ],
   "author": "",
   "license": "MIT"
-} 
+}
