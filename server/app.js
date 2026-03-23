@@ -288,21 +288,6 @@ app.get('/midnight', async (req, res) => {
 </html>`);
 });
 
-// Reset page - shows security warning (NEVER actually resets counter)
-app.get('/reset', async (req, res) => {
-  try {
-    // Just serve the warning page
-    res.sendFile(path.join(__dirname, '..', 'public', 'reset.html'));
-  } catch (error) {
-    console.error('Error serving reset page:', error);
-    res.status(500).send('Error loading page');
-  }
-});
-
-// Learned lesson page - educational content
-app.get('/learned-lesson', (req, res) => {
-  res.sendFile(path.join(__dirname, '..', 'public', 'learned-lesson.html'));
-});
 
 // API endpoint to get current counter
 app.get('/api/counter', async (req, res) => {
